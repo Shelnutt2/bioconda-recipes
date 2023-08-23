@@ -1,0 +1,68 @@
+{% set name = "celloracle" %}
+{% set version = "0.14.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/celloracle-{{ version }}.tar.gz
+  sha256: ab155bb3b295206756e24268fd18cb8d73afa08eefbca370314dcc0a2e7e342f
+
+build:
+  skip: true  # [py2k]
+  #script: {{ PYTHON }} -m pip install . -vv
+  script: "{{ PYTHON }} -m pip install --no-deps --ignore-installed . -vv"
+  number: 0
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - numpy                                  # [build_platform != target_platform]
+  host:
+    - pip
+    - python
+    - cython <3.0
+    - numpy
+  run:
+    - python
+    - cython <3.0
+    - numpy
+    - scipy
+    - numba >=0.50.1
+    - matplotlib-base <3.7
+    - seaborn
+    - scikit-learn
+    - h5py >=3.1.0
+    - pandas >=1.0.3,<=1.5.3
+    - velocyto.py >=0.17
+    - umap-learn
+    - pyarrow >=0.17
+    - tqdm >=4.45
+    - igraph >=0.10.1
+    - louvain
+    - jupyter
+    - anndata >=0.7.5
+    - scanpy >=1.6
+    - joblib
+    - goatools
+    - genomepy >=0.8.4
+    - gimmemotifs >=0.14.4,<=0.17.1
+
+test:
+  imports:
+    - celloracle
+
+about:
+  home: https://github.com/morris-lab/CellOracle
+  summary: in silico gene perturbation analysis and GRN analysis with single cell data
+  license: Apache-2.0
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - Shelnutt2
+    - aaronwolen
+    - ckrilow
